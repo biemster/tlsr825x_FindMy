@@ -31,12 +31,23 @@
 
 //#define		MY_RF_POWER_INDEX	RF_POWER_P10p29dBm // 10.29 dbm
 #define	MY_RF_POWER_INDEX	RF_POWER_P0p04dBm
-											
+
+static u8 public_key[] = {
+	0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xef,
+	0xfe,0xdd,0xcc,0xbb,0xaa,0x99,0x88,0x77,0x66,0x55,0x44,0x33,0x22,0x11
+};
+
 void user_init_normal(void)
 {
 	random_generator_init();
 
-	u8 mac_addr[6] = {0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA}; // reverse, for some reason
+	u8 mac_addr[6];
+	mac_addr[5] = public_key[0] | 0xc0;
+	mac_addr[4] = public_key[1];
+	mac_addr[3] = public_key[2];
+	mac_addr[2] = public_key[3];
+	mac_addr[1] = public_key[4];
+	mac_addr[0] = public_key[5];
 
 	////// Controller Initialization  //////////
 	blc_ll_initBasicMCU();
@@ -55,6 +66,9 @@ void user_init_normal(void)
 		0x00, /* First two bits */
 		0x00, /* Hint (0x00) */
 	};
+
+	memcpy(&tbl_advData[7], &public_key[6], 22);
+	tbl_advData[29] = public_key[0] >> 6;
 	bls_ll_setAdvData( (u8 *)tbl_advData, sizeof(tbl_advData) );
 
 	u8 status = bls_ll_setAdvParam( ADV_INTERVAL_2S,
