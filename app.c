@@ -53,6 +53,8 @@ void user_init_normal(void)
 	blc_ll_initBasicMCU();
 	blc_ll_initStandby_module(mac_addr);
 	blc_ll_initAdvertising_module(mac_addr);
+	blc_ll_initPowerManagement_module();
+	bls_pm_setSuspendMask(SUSPEND_ADV | DEEPSLEEP_RETENTION_ADV | SUSPEND_CONN | DEEPSLEEP_RETENTION_CONN);
 
 	u8 tbl_advData[] = {
 		0x1e, /* Length (30) */
