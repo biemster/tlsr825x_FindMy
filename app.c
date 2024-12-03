@@ -90,9 +90,16 @@ void user_init_normal(void)
 
 	rf_set_power_level_index (MY_RF_POWER_INDEX);
 	bls_ll_setAdvEnable(1);
-	irq_enable();
 }
 
+
+_attribute_ram_code_ void user_init_deepRetn(void)
+{
+	blc_ll_initBasicMCU();   //mandatory
+	rf_set_power_level_index (MY_RF_POWER_INDEX);
+	blc_ll_recoverDeepRetention();
+	irq_enable();
+}
 
 _attribute_ram_code_ void main_loop (void)
 {

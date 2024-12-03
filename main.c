@@ -57,7 +57,12 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 
 	blc_app_loadCustomizedParameters();  //load customized freq_offset cap value
 
-	user_init_normal();
+	if( deepRetWakeUp ) {
+		user_init_deepRetn();
+	}
+	else {
+		user_init_normal();
+	}
 
 	while (1) {
 #if (MODULE_WATCHDOG_ENABLE)
